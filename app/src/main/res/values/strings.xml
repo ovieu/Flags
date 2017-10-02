@@ -1,4 +1,8 @@
 <resources>
     <string name="app_name">Flags</string>
     <string name="category_menu">Categories</string>
+    <string name="dialog_title">Pick A Region</string>
+    <string name="startGame">Start Game</string>
+    <string name="cancel">Cancel</string>
+
 </resources>
