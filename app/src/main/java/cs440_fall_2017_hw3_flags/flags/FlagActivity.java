@@ -13,6 +13,7 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Random;
 
 public class FlagActivity extends AppCompatActivity {
     /* list of selected country */
@@ -34,6 +35,12 @@ public class FlagActivity extends AppCompatActivity {
     int mWrongAnswerCount;
     int mLevelCount;
     int mRoundCount;
+
+    /* holds the current continent */
+    String mCurrentContinent = null;
+
+    /* used to generate random values */
+    Random random = new Random();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,6 +81,34 @@ public class FlagActivity extends AppCompatActivity {
         // sets the game to display the current level and round
         displayGameInfo();
 
+        //  get and display flags
+        showFlags();
+
+    }
+
+    /**
+     *  select a random folder, get the four flags,
+     *  display them and display the button answers
+     */
+    private void showFlags() {
+        //  get random continent
+        mCurrentContinent = getContinent();
+        Log.d("real-continent", "the selected continent is: " + mCurrentContinent);
+
+        // get the four flags from the current continent
+
+
+    }
+
+    /** returns a continent from the list of continents
+     *  selected by the user from the main screen
+     * @return
+     */
+    private String getContinent() {
+        int index = random.nextInt(mSelectedContinents.size());
+        String continent = mSelectedContinents.get(index);
+        Log.d("randomcontinent", "the generated continent is :" + continent);
+        return continent;
 
     }
 
