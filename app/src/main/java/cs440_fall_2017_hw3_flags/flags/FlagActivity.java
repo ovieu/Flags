@@ -29,6 +29,12 @@ public class FlagActivity extends AppCompatActivity {
     TextView mLevel_textView;   // displays the current level per game
     TextView mRegion_textView;  // dislays the select region message
 
+    /* the game variables */
+    int mCorrectAnswerCount;
+    int mWrongAnswerCount;
+    int mLevelCount;
+    int mRoundCount;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -58,6 +64,37 @@ public class FlagActivity extends AppCompatActivity {
         //  set and position the elements on the screen
         setFrameSize(dsplyMetrics);
 
+        //  set all the game counters to initial values
+        initializeGameCounters();
+
+        //  --- > delete this is a test code
+        Log.d("Gamevariables", "correctAnswerCount: " + mCorrectAnswerCount + " wrongAnswerCount: " +
+                mWrongAnswerCount + " currentLevel: " + mLevelCount + " currentRound: " + mRoundCount);
+
+        // sets the game to display the current level and round
+        displayGameInfo();
+
+
+    }
+
+    /**
+     *  checks the value of the current round and the current level
+     *  and displays them on screen
+     */
+    private void displayGameInfo() {
+        mRound_textView.setText("Round " + mRoundCount);
+        mLevel_textView.setText("Level " + mLevelCount);
+    }
+
+
+    /**
+     *  set all the game variables to their initial values
+     */
+    private void initializeGameCounters() {
+        mCorrectAnswerCount = 0;
+        mWrongAnswerCount = 0;
+        mLevelCount = 1;
+        mRoundCount = 1;
     }
 
     /* get the id's of all the views in the framelayout */
