@@ -1,6 +1,8 @@
 package cs440_fall_2017_hw3_flags.flags;
 
+import android.content.res.AssetManager;
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.DisplayMetrics;
@@ -11,6 +13,8 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Random;
@@ -41,6 +45,9 @@ public class FlagActivity extends AppCompatActivity {
 
     /* used to generate random values */
     Random random = new Random();
+
+    /* the randomly selected flags to be displayed are stored here */
+    Drawable[] flag_drawables = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -96,7 +103,106 @@ public class FlagActivity extends AppCompatActivity {
         Log.d("real-continent", "the selected continent is: " + mCurrentContinent);
 
         // get the four flags from the current continent
+        flag_drawables = getRandomFlags();
 
+        //  display the flags in the four image views
+        setFlagsInViews();
+
+
+    }
+
+    /**
+     *  sets the image views to display the flags according
+     *  to the current level
+     */
+    private void setFlagsInViews() {
+        //  this is test code
+        //  set the alpha's of all the flags to zero
+        mFlag1.setAlpha(0f);
+        mFlag2.setAlpha(0f);
+        mFlag3.setAlpha(0f);
+        mFlag4.setAlpha(0f);
+
+        if (mLevelCount <= 4) {
+            mFlag1.setImageDrawable(flag_drawables[0]);
+            mFlag1.setAlpha(1.0f);
+        }
+
+        if (mLevelCount <= 3) {
+            mFlag2.setImageDrawable(flag_drawables[1]);
+            mFlag2.setAlpha(1.0f);
+        }
+        if (mLevelCount <= 2) {
+            mFlag3.setImageDrawable(flag_drawables[2]);
+            mFlag3.setAlpha(1.0f);
+        }
+        if (mLevelCount <= 1) {
+            mFlag4.setImageDrawable(flag_drawables[3]);
+            mFlag4.setAlpha(1.0f);
+        }
+    }
+
+    /**
+     *  returns four flags from the selected continent
+     *
+     */
+    public Drawable[] getRandomFlags() {
+        final int NUM_FLAGS = 4;
+
+        // create a local drawable variable to hold four flags
+        Drawable[] drawables = new Drawable[NUM_FLAGS];
+
+        AssetManager assetManager = getAssets();
+
+        try {
+
+            //  get the path to the selected continent
+            String path = "asset_continents/"+mCurrentContinent;
+
+            //  get a list of all the countries in the continent
+            String[] flags_in_continent = assetManager.list(path);
+
+            //  make a new Random generator
+            Random pRandom = new Random();
+
+            path += "/";
+
+            //  create a loop to get four flags
+            for (int i = 0; i < NUM_FLAGS; i++) {
+
+                //  create an index that represents the flags
+                //  in the continents
+                int index = pRandom.nextInt(flags_in_continent.length);
+
+                //  the actual selected flag
+                String pSelectedFlag = flags_in_continent[index];
+
+                //  flaw: the flags might repeat
+
+                //  get the full path to the flag
+                pSelectedFlag = path + pSelectedFlag;
+
+                //  open the stream and read the flag into the drawables
+                InputStream stream = assetManager.open(pSelectedFlag);
+
+                //  make a local drawable to hold the selected flag
+                Drawable drw = Drawable.createFromStream(stream, null);
+                drawables[i] = drw;
+
+                //  test: show the flags that were selected
+                Log.d("Selected-flags", "the selected flags are" + pSelectedFlag);
+            }
+
+        } catch (IOException i) {
+            Log.e("Flags", "no flag found");
+        }
+
+        //  test the drawables to see what was stored here
+        Log.d("stored-drawables", Arrays.toString(drawables));
+
+        //  --> this might be empty at the moment
+        //  or a different type
+        return drawables;
 
     }
 
@@ -185,7 +291,7 @@ public class FlagActivity extends AppCompatActivity {
         FrameLayout.LayoutParams levelCountParam = new FrameLayout.LayoutParams(txtViewWidth,txtViewHeight);
         levelCountParam.setMargins(xOffset, yOffset, 0, 0);
         mLevel_textView.setLayoutParams(levelCountParam);
-        mLevel_textView.setText("Level 1 place holder");
+        mLevel_textView.setText("Level 1");
 
         // set the size and position of the round textview to some distace
         // after the level text view
