@@ -9,6 +9,8 @@ import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -21,6 +23,10 @@ import java.util.Arrays;
 import java.util.Random;
 
 public class FlagActivity extends AppCompatActivity {
+
+    /* create references to the animation */
+    Animation fade, shake;
+
     /* list of selected country */
     ArrayList<String> mSelectedContinents = null;
 
@@ -57,6 +63,11 @@ public class FlagActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_flag);
+
+        //  create the shake animation
+        shake = AnimationUtils.loadAnimation(FlagActivity.this, R.anim.shake);
+        //  create the fade animation
+        fade = AnimationUtils.loadAnimation(FlagActivity.this, R.anim.fade);
 
 
         //  first thing is to save the list of continents into
@@ -122,6 +133,9 @@ public class FlagActivity extends AppCompatActivity {
             //  button pressed by the user
             Button b = (Button)view;
 
+            //  disable the button so the user doesn't reselect
+
+
             //  set the answer to the button pressed by the user
             mUserAnswer = b.getText().toString();
 
@@ -132,9 +146,36 @@ public class FlagActivity extends AppCompatActivity {
             //  Step 2: check if the user got the question right
             //  preamble: get the current continent and replace the underscore
             String m_CurrentContinent = mCurrentContinent;
-            m_CurrentContinent.replace("_", " ");
+            m_CurrentContinent = m_CurrentContinent.replace("_", " ");
+
+            // --> delete this
+            // check if the formatting works
+            Log.d("correct-format", "the replace created m_CurrentContinent: " + m_CurrentContinent);
+            Log.d("correct-format", "the replace created mCurrentContinent: " + mCurrentContinent);
             if (mUserAnswer.equals(m_CurrentContinent)) {
                 Log.d("Answer", "You got the answer");
+
+                //  if the user gets the answer
+                //  increment the level and correct answer count
+                mCorrectAnswerCount++;
+                mLevelCount++;
+
+                //  play correct animation
+                playCorrectAnimation();
+                disableButtons();
+
+                //  if correct answer >= 3, go to next level
+                if (mCorrectAnswerCount >= 3) {
+                    mLevelCount++;
+                }
+
+                //  set the game variables
+                mLevel_textView.setText("Level " + String.valueOf(mLevelCount));
+                mRound_textView.setText("Round " + String.valueOf(mRoundCount));
+
+
+                //  check the value of the level and count
+                Log.d("level-count", "level: " + mLevelCount + " correctAnsewer: " + mCorrectAnswerCount);
             } else {
                 Log.d("Answer", "You failed the answer");
             }
@@ -142,10 +183,31 @@ public class FlagActivity extends AppCompatActivity {
     };
 
     /**
+     *  disables the buttons while the animation is on
+     */
+    private void disableButtons() {
+        btn1.setEnabled(false);
+        btn2.setEnabled(false);
+        btn3.setEnabled(false);
+        btn4.setEnabled(false);
+    }
+
+    /**
+     *  plays the correct animation
+     */
+    private void playCorrectAnimation() {
+        mFlag1.startAnimation(fade);
+        mFlag2.startAnimation(fade);
+        mFlag3.startAnimation(fade);
+        mFlag4.startAnimation(fade);
+    }
+
+    /**
      *  select a random folder, get the four flags,
      *  display them and display the button answers
      */
     private void showFlags() {
+
         //  get random continent
         mCurrentContinent = getContinent();
         Log.d("real-continent", "the selected continent is: " + mCurrentContinent);

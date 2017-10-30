@@ -134,6 +134,9 @@ public class MainActivity extends AppCompatActivity {
 
 
                 }
+
+                //  reset the selected conitinent count to zero
+                mSelectedContinentCount = 0;
             }
         });
 
