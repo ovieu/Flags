@@ -8,6 +8,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.View;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -93,6 +94,18 @@ public class FlagActivity extends AppCompatActivity {
 
     }
 
+
+    /**
+     *  the butons control the game
+     *  on click, the
+     */
+    View.OnClickListener selectButtonOnClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+
+        }
+    };
+
     /**
      *  select a random folder, get the four flags,
      *  display them and display the button answers
@@ -108,7 +121,31 @@ public class FlagActivity extends AppCompatActivity {
         //  display the flags in the four image views
         setFlagsInViews();
 
+        //  set the buttons to reflect the name of continents
+        setButtons();
 
+
+    }
+
+    /**
+     *  sets the buttons to reflect continent names
+     */
+    private void setButtons() {
+
+        btn1.setText(mSelectedContinents.get(0).replace("_", " "));
+        btn2.setText(mSelectedContinents.get(1).replace("_", " "));
+        btn3.setText(mSelectedContinents.get(2).replace("_", " "));
+        btn4.setText(mSelectedContinents.get(3).replace("_", " "));
+
+        btn1.setOnClickListener(selectButtonOnClickListener);
+        btn2.setOnClickListener(selectButtonOnClickListener);
+        btn3.setOnClickListener(selectButtonOnClickListener);
+        btn4.setOnClickListener(selectButtonOnClickListener);
+
+        btn1.setClickable(true);
+        btn2.setClickable(true);
+        btn3.setClickable(true);
+        btn4.setClickable(true);
     }
 
     /**
@@ -286,7 +323,6 @@ public class FlagActivity extends AppCompatActivity {
         //  the y-offset is the distatnce from the top of the screen to the view
         int xOffset = (int) (dispWidth * 0.02);
 
-
         //  set the size and position of the level texview
         FrameLayout.LayoutParams levelCountParam = new FrameLayout.LayoutParams(txtViewWidth,txtViewHeight);
         levelCountParam.setMargins(xOffset, yOffset, 0, 0);
@@ -308,14 +344,14 @@ public class FlagActivity extends AppCompatActivity {
         flag1_params.setMargins(xOffset, yOffset, 0, 0);
         mFlag1.setLayoutParams(flag1_params);
         mFlag1.setPadding(4,4,4,4);
-        mFlag1.setBackgroundColor(Color.BLACK);
+        mFlag1.setBackgroundColor(Color.WHITE);
 
         //  set the size and position of flag 2
         FrameLayout.LayoutParams flag2_params = new FrameLayout.LayoutParams(flagWidth, flagHeight);
         flag2_params.setMargins((xOffset + flagWidth), yOffset, 0, 0);
         mFlag2.setLayoutParams(flag2_params);
         mFlag2.setPadding(4,4,4,4);
-        mFlag2.setBackgroundColor(Color.GRAY);
+        mFlag2.setBackgroundColor(Color.WHITE);
 
         // the second row of flag images are positoned some offset from the top of
         // the screen plus the distance from the first row of images
@@ -326,15 +362,14 @@ public class FlagActivity extends AppCompatActivity {
         flag3_params.setMargins(xOffset, yOffset, 0, 0);
         mFlag3.setLayoutParams(flag3_params);
         mFlag3.setPadding(4,4,4,4);
-        mFlag3.setBackgroundColor(Color.RED);
+        mFlag3.setBackgroundColor(Color.WHITE);
 
         //  set the size and position of flag 4
         FrameLayout.LayoutParams flag4_params = new FrameLayout.LayoutParams(flagWidth, flagHeight);
         flag4_params.setMargins((xOffset + flagWidth), yOffset, 0, 0);
         mFlag4.setLayoutParams(flag4_params);
         mFlag4.setPadding(4,4,4,4);
-        mFlag4.setBackgroundColor(Color.BLUE);
-
+        mFlag4.setBackgroundColor(Color.WHITE);
 
         //  the select region text view is positioned immeditely below the images
         //  and above the buttons.
@@ -383,11 +418,6 @@ public class FlagActivity extends AppCompatActivity {
         btn4.setLayoutParams(but4_params);
         btn4.setPadding(4,4,4,4);
         btn4.setText("Nigeria");
-
-
-
-
-
     }
 
 }
