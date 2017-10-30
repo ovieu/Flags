@@ -128,6 +128,16 @@ public class FlagActivity extends AppCompatActivity {
             //  -->delete this
             //  test this to see if it works
             Log.d("buttonPressed", "the user selected: " + mUserAnswer);
+
+            //  Step 2: check if the user got the question right
+            //  preamble: get the current continent and replace the underscore
+            String m_CurrentContinent = mCurrentContinent;
+            m_CurrentContinent.replace("_", " ");
+            if (mUserAnswer.equals(m_CurrentContinent)) {
+                Log.d("Answer", "You got the answer");
+            } else {
+                Log.d("Answer", "You failed the answer");
+            }
         }
     };
 
