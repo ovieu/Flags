@@ -44,6 +44,9 @@ public class FlagActivity extends AppCompatActivity {
     /* holds the current continent */
     String mCurrentContinent = null;
 
+    /* holds the answer selected by the user */
+    String mUserAnswer = null;
+
     /* used to generate random values */
     Random random = new Random();
 
@@ -96,13 +99,35 @@ public class FlagActivity extends AppCompatActivity {
 
 
     /**
-     *  the butons control the game
-     *  on click, the
+     *  the button basically controls the game logic
+     *  When the button is clicked, it checks to see if the
+     *  user selected the correct continent,
+     *  if correct,
+     *      plays correct animation and increment level and
+     *      increment correct answer count
+     *  else
+     *      plays incorrect animation and increment
+     *      correct answer count
+     *
      */
     View.OnClickListener selectButtonOnClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
 
+            /* convert this section to a level switch statement */
+
+
+            //  Step 1: get the name of the continent selected by the user
+            //  create a dummy button to hold the reference to the
+            //  button pressed by the user
+            Button b = (Button)view;
+
+            //  set the answer to the button pressed by the user
+            mUserAnswer = b.getText().toString();
+
+            //  -->delete this
+            //  test this to see if it works
+            Log.d("buttonPressed", "the user selected: " + mUserAnswer);
         }
     };
 
@@ -123,8 +148,6 @@ public class FlagActivity extends AppCompatActivity {
 
         //  set the buttons to reflect the name of continents
         setButtons();
-
-
     }
 
     /**
