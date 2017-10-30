@@ -1,18 +1,24 @@
 package cs440_fall_2017_hw3_flags.flags;
 
+import android.content.res.AssetManager;
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.View;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Random;
 
 public class FlagActivity extends AppCompatActivity {
     /* list of selected country */
@@ -34,6 +40,15 @@ public class FlagActivity extends AppCompatActivity {
     int mWrongAnswerCount;
     int mLevelCount;
     int mRoundCount;
+
+    /* holds the current continent */
+    String mCurrentContinent = null;
+
+    /* used to generate random values */
+    Random random = new Random();
+
+    /* the randomly selected flags to be displayed are stored here */
+    Drawable[] flag_drawables = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,6 +89,169 @@ public class FlagActivity extends AppCompatActivity {
         // sets the game to display the current level and round
         displayGameInfo();
 
+        //  get and display flags
+        showFlags();
+
+    }
+
+
+    /**
+     *  the butons control the game
+     *  on click, the
+     */
+    View.OnClickListener selectButtonOnClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+
+        }
+    };
+
+    /**
+     *  select a random folder, get the four flags,
+     *  display them and display the button answers
+     */
+    private void showFlags() {
+        //  get random continent
+        mCurrentContinent = getContinent();
+        Log.d("real-continent", "the selected continent is: " + mCurrentContinent);
+
+        // get the four flags from the current continent
+        flag_drawables = getRandomFlags();
+
+        //  display the flags in the four image views
+        setFlagsInViews();
+
+        //  set the buttons to reflect the name of continents
+        setButtons();
+
+
+    }
+
+    /**
+     *  sets the buttons to reflect continent names
+     */
+    private void setButtons() {
+
+        btn1.setText(mSelectedContinents.get(0).replace("_", " "));
+        btn2.setText(mSelectedContinents.get(1).replace("_", " "));
+        btn3.setText(mSelectedContinents.get(2).replace("_", " "));
+        btn4.setText(mSelectedContinents.get(3).replace("_", " "));
+
+        btn1.setOnClickListener(selectButtonOnClickListener);
+        btn2.setOnClickListener(selectButtonOnClickListener);
+        btn3.setOnClickListener(selectButtonOnClickListener);
+        btn4.setOnClickListener(selectButtonOnClickListener);
+
+        btn1.setClickable(true);
+        btn2.setClickable(true);
+        btn3.setClickable(true);
+        btn4.setClickable(true);
+    }
+
+    /**
+     *  sets the image views to display the flags according
+     *  to the current level
+     */
+    private void setFlagsInViews() {
+        //  this is test code
+        //  set the alpha's of all the flags to zero
+        mFlag1.setAlpha(0f);
+        mFlag2.setAlpha(0f);
+        mFlag3.setAlpha(0f);
+        mFlag4.setAlpha(0f);
+
+        if (mLevelCount <= 4) {
+            mFlag1.setImageDrawable(flag_drawables[0]);
+            mFlag1.setAlpha(1.0f);
+        }
+
+        if (mLevelCount <= 3) {
+            mFlag2.setImageDrawable(flag_drawables[1]);
+            mFlag2.setAlpha(1.0f);
+        }
+        if (mLevelCount <= 2) {
+            mFlag3.setImageDrawable(flag_drawables[2]);
+            mFlag3.setAlpha(1.0f);
+        }
+        if (mLevelCount <= 1) {
+            mFlag4.setImageDrawable(flag_drawables[3]);
+            mFlag4.setAlpha(1.0f);
+        }
+    }
+
+    /**
+     *  returns four flags from the selected continent
+     *
+     */
+    public Drawable[] getRandomFlags() {
+        final int NUM_FLAGS = 4;
+
+        // create a local drawable variable to hold four flags
+        Drawable[] drawables = new Drawable[NUM_FLAGS];
+
+        AssetManager assetManager = getAssets();
+
+        try {
+
+            //  get the path to the selected continent
+            String path = "asset_continents/"+mCurrentContinent;
+
+            //  get a list of all the countries in the continent
+            String[] flags_in_continent = assetManager.list(path);
+
+            //  make a new Random generator
+            Random pRandom = new Random();
+
+            path += "/";
+
+            //  create a loop to get four flags
+            for (int i = 0; i < NUM_FLAGS; i++) {
+
+                //  create an index that represents the flags
+                //  in the continents
+                int index = pRandom.nextInt(flags_in_continent.length);
+
+                //  the actual selected flag
+                String pSelectedFlag = flags_in_continent[index];
+
+                //  flaw: the flags might repeat
+
+                //  get the full path to the flag
+                pSelectedFlag = path + pSelectedFlag;
+
+                //  open the stream and read the flag into the drawables
+                InputStream stream = assetManager.open(pSelectedFlag);
+
+                //  make a local drawable to hold the selected flag
+                Drawable drw = Drawable.createFromStream(stream, null);
+                drawables[i] = drw;
+
+                //  test: show the flags that were selected
+                Log.d("Selected-flags", "the selected flags are" + pSelectedFlag);
+            }
+
+        } catch (IOException i) {
+            Log.e("Flags", "no flag found");
+        }
+
+        //  test the drawables to see what was stored here
+        Log.d("stored-drawables", Arrays.toString(drawables));
+
+        //  --> this might be empty at the moment
+        //  or a different type
+        return drawables;
+
+    }
+
+    /** returns a continent from the list of continents
+     *  selected by the user from the main screen
+     * @return
+     */
+    private String getContinent() {
+        int index = random.nextInt(mSelectedContinents.size());
+        String continent = mSelectedContinents.get(index);
+        Log.d("randomcontinent", "the generated continent is :" + continent);
+        return continent;
 
     }
 
@@ -145,12 +323,11 @@ public class FlagActivity extends AppCompatActivity {
         //  the y-offset is the distatnce from the top of the screen to the view
         int xOffset = (int) (dispWidth * 0.02);
 
-
         //  set the size and position of the level texview
         FrameLayout.LayoutParams levelCountParam = new FrameLayout.LayoutParams(txtViewWidth,txtViewHeight);
         levelCountParam.setMargins(xOffset, yOffset, 0, 0);
         mLevel_textView.setLayoutParams(levelCountParam);
-        mLevel_textView.setText("Level 1 place holder");
+        mLevel_textView.setText("Level 1");
 
         // set the size and position of the round textview to some distace
         // after the level text view
@@ -167,14 +344,14 @@ public class FlagActivity extends AppCompatActivity {
         flag1_params.setMargins(xOffset, yOffset, 0, 0);
         mFlag1.setLayoutParams(flag1_params);
         mFlag1.setPadding(4,4,4,4);
-        mFlag1.setBackgroundColor(Color.BLACK);
+        mFlag1.setBackgroundColor(Color.WHITE);
 
         //  set the size and position of flag 2
         FrameLayout.LayoutParams flag2_params = new FrameLayout.LayoutParams(flagWidth, flagHeight);
         flag2_params.setMargins((xOffset + flagWidth), yOffset, 0, 0);
         mFlag2.setLayoutParams(flag2_params);
         mFlag2.setPadding(4,4,4,4);
-        mFlag2.setBackgroundColor(Color.GRAY);
+        mFlag2.setBackgroundColor(Color.WHITE);
 
         // the second row of flag images are positoned some offset from the top of
         // the screen plus the distance from the first row of images
@@ -185,15 +362,14 @@ public class FlagActivity extends AppCompatActivity {
         flag3_params.setMargins(xOffset, yOffset, 0, 0);
         mFlag3.setLayoutParams(flag3_params);
         mFlag3.setPadding(4,4,4,4);
-        mFlag3.setBackgroundColor(Color.RED);
+        mFlag3.setBackgroundColor(Color.WHITE);
 
         //  set the size and position of flag 4
         FrameLayout.LayoutParams flag4_params = new FrameLayout.LayoutParams(flagWidth, flagHeight);
         flag4_params.setMargins((xOffset + flagWidth), yOffset, 0, 0);
         mFlag4.setLayoutParams(flag4_params);
         mFlag4.setPadding(4,4,4,4);
-        mFlag4.setBackgroundColor(Color.BLUE);
-
+        mFlag4.setBackgroundColor(Color.WHITE);
 
         //  the select region text view is positioned immeditely below the images
         //  and above the buttons.
@@ -242,11 +418,6 @@ public class FlagActivity extends AppCompatActivity {
         btn4.setLayoutParams(but4_params);
         btn4.setPadding(4,4,4,4);
         btn4.setText("Nigeria");
-
-
-
-
-
     }
 
 }
