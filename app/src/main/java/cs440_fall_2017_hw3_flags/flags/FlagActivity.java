@@ -185,6 +185,8 @@ public class FlagActivity extends AppCompatActivity {
                 mLevel_textView.setText("Level " + String.valueOf(mLevelCount));
                 mRound_textView.setText("Round " + String.valueOf(mRoundCount));
 
+                //  ask a new question - launch flag and set button
+                showFlags();
 
                 //  check the value of the level and count
                 Log.d("level-count", "level: " + mLevelCount + " correctAnsewer: " + mCorrectAnswerCount);
@@ -362,20 +364,20 @@ public class FlagActivity extends AppCompatActivity {
         mFlag3.setAlpha(0f);
         mFlag4.setAlpha(0f);
 
-        if (mLevelCount <= 4) {
+        if (mRoundCount <= 4) {
             mFlag1.setImageDrawable(flag_drawables[0]);
             mFlag1.setAlpha(1.0f);
         }
 
-        if (mLevelCount <= 3) {
+        if (mRoundCount <= 3) {
             mFlag2.setImageDrawable(flag_drawables[1]);
             mFlag2.setAlpha(1.0f);
         }
-        if (mLevelCount <= 2) {
+        if (mRoundCount <= 2) {
             mFlag3.setImageDrawable(flag_drawables[2]);
             mFlag3.setAlpha(1.0f);
         }
-        if (mLevelCount <= 1) {
+        if (mRoundCount <= 1) {
             mFlag4.setImageDrawable(flag_drawables[3]);
             mFlag4.setAlpha(1.0f);
         }
