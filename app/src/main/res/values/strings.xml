@@ -4,5 +4,9 @@
     <string name="dialog_title">Pick A Region</string>
     <string name="startGame">Start Game</string>
     <string name="cancel">Cancel</string>
+    <string name="game_over">Game Over</string>
+    <string name="player_lost">You Lost</string>
+    <string name="player_won">You Won</string>
+    <string name="play_again">Restart Game</string>
 
 </resources>

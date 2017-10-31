@@ -59,6 +59,12 @@ public class FlagActivity extends AppCompatActivity {
     /* the randomly selected flags to be displayed are stored here */
     Drawable[] flag_drawables = null;
 
+    /* checks if the buttons are disabled */
+    Boolean isButtonDisabled = false;
+
+    /* set to true if the player wins */
+    Boolean playerWon;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -125,6 +131,8 @@ public class FlagActivity extends AppCompatActivity {
         @Override
         public void onClick(View view) {
 
+
+
             /* convert this section to a level switch statement */
 
 
@@ -163,10 +171,11 @@ public class FlagActivity extends AppCompatActivity {
                 //  play correct animation
                 playCorrectAnimation();
                 disableButtons();
+                isButtonDisabled = true;
 
                 //  if correct answer >= 3, go to next level
                 if (mCorrectAnswerCount >= 3) {
-                    mLevelCount++;
+                    mRoundCount++;
                 }
 
                 //  set the game variables
@@ -178,9 +187,41 @@ public class FlagActivity extends AppCompatActivity {
                 Log.d("level-count", "level: " + mLevelCount + " correctAnsewer: " + mCorrectAnswerCount);
             } else {
                 Log.d("Answer", "You failed the answer");
+
+                //  increment incorrect answer count
+                mWrongAnswerCount++;
+
+                //  play wrong answer animation
+                playIncorrectAnimation();
+                disableButtons();
+                isButtonDisabled = true;
+
+                //  check if the user has failed three times
+                if (mWrongAnswerCount >= 3) {
+                    //  set the value of playerWon = false;
+                   playerWon = false;
+
+
+                }
             }
+
+            /*  re-enable buttons if they are disabled */
+            enableButtons();
         }
     };
+
+
+
+
+    /**
+     *  used to reenable the disabled buttons
+     */
+    private void enableButtons() {
+        btn1.setEnabled(true);
+        btn2.setEnabled(true);
+        btn3.setEnabled(true);
+        btn4.setEnabled(true);
+    }
 
     /**
      *  disables the buttons while the animation is on
@@ -200,6 +241,16 @@ public class FlagActivity extends AppCompatActivity {
         mFlag2.startAnimation(fade);
         mFlag3.startAnimation(fade);
         mFlag4.startAnimation(fade);
+    }
+
+    /**
+     *  plays the wrong animation
+     */
+    private void playIncorrectAnimation() {
+        mFlag1.startAnimation(shake);
+        mFlag2.startAnimation(shake);
+        mFlag3.startAnimation(shake);
+        mFlag4.startAnimation(shake);
     }
 
     /**
