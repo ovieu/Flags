@@ -1,9 +1,12 @@
 package cs440_fall_2017_hw3_flags.flags;
 
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.res.AssetManager;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -201,6 +204,8 @@ public class FlagActivity extends AppCompatActivity {
                     //  set the value of playerWon = false;
                    playerWon = false;
 
+                //  call the end game method
+                    endGame();
 
                 }
             }
@@ -211,7 +216,58 @@ public class FlagActivity extends AppCompatActivity {
     };
 
 
+    /**
+     *  ends the game and displays a dialog message depending on if the user
+     *  won or lost
+     */
+    private void endGame() {
+        /**
+         *  AlertDialog.Builder builder = new AlertDialog.Builder(FlagActivity.this);
+         builder.setTitle(R.string.game_over);
+         if( status == 1) {
+         builder.setMessage(R.string.you_won);
+         }else{
+         builder.setMessage(R.string.you_lost);
+         }
+         builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+        @Override
+        public void onClick(DialogInterface dialogInterface, int i) {
 
+        Intent intent = new Intent(FlagActivity.this,Splash.class);
+        intent.putExtra("isReStart",true);
+        startActivityForResult(intent, 211);
+        }
+        });
+         builder.show();
+
+         */
+        AlertDialog.Builder builder = new AlertDialog.Builder(FlagActivity.this);
+        builder.setTitle(R.string.game_over);
+
+        if (playerWon) {
+            builder.setMessage(R.string.player_won);
+        } else {
+            builder.setMessage(R.string.player_lost);
+        }
+
+        //  setup the positive button to restart the game
+        //  by launching the select country activity
+        builder.setPositiveButton(R.string.play_again, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                //  launch the main menu if the player loses the game
+                Intent intent = new Intent(FlagActivity.this,MainActivity.class);
+
+                //  send a signal to the main menu to automatically launch the
+                //  country selector if the game is a new game
+                intent.putExtra("isNewGame", "true");
+
+                //  start the main menu activity\
+                startActivityForResult(intent, 2020);
+            }
+        });
+        builder.show();
+    }
 
     /**
      *  used to reenable the disabled buttons
