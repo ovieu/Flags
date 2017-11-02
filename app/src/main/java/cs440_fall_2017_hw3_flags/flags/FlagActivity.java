@@ -68,10 +68,26 @@ public class FlagActivity extends AppCompatActivity {
     /* set to true if the player wins */
     Boolean playerWon;
 
+    /*  the various levels of the game */
+    private static final int LEVEL_ONE = 1;
+    private static final int LEVEL_TWO = 2;
+    private static final int LEVEL_THREE = 3;
+    private static final int LEVEL_FOUR = 4;
+
+    /* the initial game level */
+    private static int gameLevel = 1;
+
+    /* keeps track of the failure and success */
+    private static int maxFailure = 0;
+    private static int maxSuccess = 0;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_flag);
+
+        //  set game level to one
+        gameLevel = LEVEL_ONE;
 
         //  create the shake animation
         shake = AnimationUtils.loadAnimation(FlagActivity.this, R.anim.shake);
@@ -134,88 +150,188 @@ public class FlagActivity extends AppCompatActivity {
         @Override
         public void onClick(View view) {
 
-
-
             /* convert this section to a level switch statement */
-
-
-            //  Step 1: get the name of the continent selected by the user
-            //  create a dummy button to hold the reference to the
-            //  button pressed by the user
-            Button b = (Button)view;
-
-            //  disable the button so the user doesn't reselect
-
-
-            //  set the answer to the button pressed by the user
-            mUserAnswer = b.getText().toString();
-
-            //  -->delete this
-            //  test this to see if it works
-            Log.d("buttonPressed", "the user selected: " + mUserAnswer);
-
-            //  Step 2: check if the user got the question right
-            //  preamble: get the current continent and replace the underscore
-            String m_CurrentContinent = mCurrentContinent;
-            m_CurrentContinent = m_CurrentContinent.replace("_", " ");
-
-            // --> delete this
-            // check if the formatting works
-            Log.d("correct-format", "the replace created m_CurrentContinent: " + m_CurrentContinent);
-            Log.d("correct-format", "the replace created mCurrentContinent: " + mCurrentContinent);
-            if (mUserAnswer.equals(m_CurrentContinent)) {
-                Log.d("Answer", "You got the answer");
-
-                //  if the user gets the answer
-                //  increment the level and correct answer count
-                mCorrectAnswerCount++;
-                mLevelCount++;
-
-                //  play correct animation
-                playCorrectAnimation();
-                disableButtons();
-                isButtonDisabled = true;
-
-                //  if correct answer >= 3, go to next level
-                if (mCorrectAnswerCount >= 3) {
-                    mRoundCount++;
-                }
-
-                //  set the game variables
-                mLevel_textView.setText("Level " + String.valueOf(mLevelCount));
-                mRound_textView.setText("Round " + String.valueOf(mRoundCount));
-
-                //  ask a new question - launch flag and set button
-                showFlags();
-
-                //  check the value of the level and count
-                Log.d("level-count", "level: " + mLevelCount + " correctAnsewer: " + mCorrectAnswerCount);
-            } else {
-                Log.d("Answer", "You failed the answer");
-
-                //  increment incorrect answer count
-                mWrongAnswerCount++;
-
-                //  play wrong answer animation
-                playIncorrectAnimation();
-                disableButtons();
-                isButtonDisabled = true;
-
-                //  check if the user has failed three times
-                if (mWrongAnswerCount >= 3) {
-                    //  set the value of playerWon = false;
-                   playerWon = false;
-
-                //  call the end game method
-                    endGame();
-
-                }
+            switch(gameLevel) {
+                case LEVEL_ONE:
+                    maxFailure = 3;
+                    maxSuccess = 4;
+                    playGame(view);
+                    break;
+                case LEVEL_TWO:
+                    maxFailure = 3;
+                    maxSuccess = 3;
+                    playGame(view);
+                    break;
+                case LEVEL_THREE:
+                    maxFailure = 3;
+                    maxSuccess = 2;
+                    playGame(view);
+                    break;
+                case LEVEL_FOUR:
+                    maxFailure = 1;
+                    maxSuccess =1;
+                    playGame(view);
+                    break;
             }
+
 
             /*  re-enable buttons if they are disabled */
             enableButtons();
         }
     };
+
+    /**
+     * determines the logic of the game per level
+     * level one - maxFailure = constant, maxSuccess = 4
+     * level two - maxFailure = constant, maxSuccess = 3
+     * level three - maxFailure = constant, maxSucess = 2;
+     * levle one - maxFailure = 1, maxSuccess = 1;
+     * @param gameLevel
+     */
+    private void playGame(View view) {
+
+       /* if (gameLevel == LEVEL_ONE) {
+            maxFailure = 3;
+            maxSuccess = 10;
+        } else if (gameLevel == LEVEL_TWO) {
+            maxFailure = 3;
+            maxSuccess = 3;
+        } else if (gameLevel == LEVEL_THREE) {
+            maxFailure = 3;
+            maxSuccess = 2;
+        } else {
+            maxFailure = 1;
+            maxSuccess =1;
+        }*/
+
+        //  test code to see the value of gamelevel and maxsuccess
+        Log.d("gameLevel", "game level: " + gameLevel + " maxsucess: " + maxSuccess);
+        //  Step 1: get the name of the continent selected by the user
+        //  create a dummy button to hold the reference to the
+        //  button pressed by the user
+        Button b = (Button)view;
+
+        //  disable the button so the user doesn't reselect
+
+
+        //  set the answer to the button pressed by the user
+        mUserAnswer = b.getText().toString();
+
+        //  -->delete this
+        //  test this to see if it works
+        Log.d("buttonPressed", "the user selected: " + mUserAnswer);
+
+        //  Step 2: check if the user got the question right
+        //  preamble: get the current continent and replace the underscore
+        String m_CurrentContinent = mCurrentContinent;
+        m_CurrentContinent = m_CurrentContinent.replace("_", " ");
+
+        // --> delete this
+        // check if the formatting works
+        Log.d("correct-format", "the replace created m_CurrentContinent: " + m_CurrentContinent);
+        Log.d("correct-format", "the replace created mCurrentContinent: " + mCurrentContinent);
+        /* if (mUserAnswer.equals(m_CurrentContinent)) { */
+        if (1 == 1) {
+            Log.d("Answer", "You got the answer");
+
+            //  if the user gets the answer
+            //  increment the level and correct answer count
+            mCorrectAnswerCount++;
+            mLevelCount++;
+
+            //  play correct animation
+            playCorrectAnimation();
+            disableButtons();
+            isButtonDisabled = true;
+
+        /*    //  if correct answer >= 3, go to next level */
+            if (mCorrectAnswerCount == maxSuccess) {
+                mRoundCount++;
+
+                //  reset the level and correct answer count and the max sucess
+                mLevelCount = 1;
+                mCorrectAnswerCount = 0;
+                maxSuccess = 0;
+                ++gameLevel;
+
+            }
+
+        /*
+            //  logic to move to level two
+            if ((gameLevel == LEVEL_ONE) && (mCorrectAnswerCount == maxSuccess)) {
+                mRoundCount = 2;
+
+                //  reset the level and correct answer count
+                //  reset the level and correct answer count
+                mLevelCount = 1;
+                mCorrectAnswerCount = 0;
+                maxSuccess = 3;
+
+                //  --> test with game level
+                gameLevel = LEVEL_TWO;
+            }
+
+            //  logic to move to level three
+            if ((gameLevel == LEVEL_TWO) && (mCorrectAnswerCount == maxSuccess)) {
+                mRoundCount = 3;
+
+                //  reset the level and correct answer count
+                //  reset the level and correct answer count
+                mLevelCount = 1;
+                mCorrectAnswerCount = 0;
+                maxSuccess = 2;
+
+                gameLevel = LEVEL_THREE;
+            }
+
+
+            //  logic to move to level four
+            if  ((gameLevel == LEVEL_THREE) && (mCorrectAnswerCount == maxSuccess)) {
+                mRoundCount = 4;
+
+                //  reset the level and correct answer count
+                //  reset the level and correct answer count
+                mLevelCount = 1;
+                mCorrectAnswerCount = 0;
+                maxSuccess = 1;
+
+                gameLevel = LEVEL_FOUR;
+            }
+
+
+
+        */    //  set the game variables
+            mLevel_textView.setText("Level " + String.valueOf(mLevelCount));
+            mRound_textView.setText("Round " + String.valueOf(mRoundCount));
+
+            //  ask a new question - launch flag and set button
+            showFlags();
+
+            //  check the value of the level and count
+            Log.d("level-count", "level: " + mLevelCount + " correctAnswer: " + mCorrectAnswerCount);
+        } else {
+            Log.d("Answer", "You failed the answer");
+
+            //  increment incorrect answer count
+            mWrongAnswerCount++;
+
+            //  play wrong answer animation
+            playIncorrectAnimation();
+            disableButtons();
+            isButtonDisabled = true;
+
+            //  check if the user has failed three times
+            if (mWrongAnswerCount >= maxFailure) {
+                //  set the value of playerWon = false;
+                playerWon = false;
+
+                //  call the end game method
+                endGame();
+
+            }
+        }
+
+    }
 
 
     /**
