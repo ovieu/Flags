@@ -39,6 +39,15 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
 
+        //  launch the continent selection menu
+        //  if the user is restarting a new game
+        Bundle extras = getIntent().getExtras();
+        if (extras != null) {
+            boolean playNewGame = extras.getBoolean("isNewGame");
+            if (playNewGame) {
+                launchContinentSelector();
+            }
+        }
 
     }
 
