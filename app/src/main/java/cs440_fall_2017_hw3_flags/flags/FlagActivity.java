@@ -6,6 +6,7 @@ import android.content.res.AssetManager;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.DisplayMetrics;
@@ -189,23 +190,10 @@ public class FlagActivity extends AppCompatActivity {
      * level two - maxFailure = constant, maxSuccess = 3
      * level three - maxFailure = constant, maxSucess = 2;
      * levle one - maxFailure = 1, maxSuccess = 1;
-     * @param gameLevel
+     * @param view  the current button pressed
      */
     private void playGame(View view) {
 
-       /* if (gameLevel == LEVEL_ONE) {
-            maxFailure = 3;
-            maxSuccess = 10;
-        } else if (gameLevel == LEVEL_TWO) {
-            maxFailure = 3;
-            maxSuccess = 3;
-        } else if (gameLevel == LEVEL_THREE) {
-            maxFailure = 3;
-            maxSuccess = 2;
-        } else {
-            maxFailure = 1;
-            maxSuccess =1;
-        }*/
 
         //  test code to see the value of gamelevel and maxsuccess
         Log.d("gameLevel", "game level: " + gameLevel + " maxsucess: " + maxSuccess);
@@ -366,10 +354,22 @@ public class FlagActivity extends AppCompatActivity {
      *  used to reenable the disabled buttons
      */
     private void enableButtons() {
-        btn1.setEnabled(true);
-        btn2.setEnabled(true);
-        btn3.setEnabled(true);
-        btn4.setEnabled(true);
+
+        //  create an aritificial delay of two seconds to
+        //  enable the flag animation show
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                btn1.setEnabled(true);
+                btn2.setEnabled(true);
+                btn3.setEnabled(true);
+                btn4.setEnabled(true);
+
+            }
+        },2000);
+
+
     }
 
     /**
