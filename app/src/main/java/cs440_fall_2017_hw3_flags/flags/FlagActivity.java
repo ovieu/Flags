@@ -221,8 +221,7 @@ public class FlagActivity extends AppCompatActivity {
         // check if the formatting works
         Log.d("correct-format", "the replace created m_CurrentContinent: " + m_CurrentContinent);
         Log.d("correct-format", "the replace created mCurrentContinent: " + mCurrentContinent);
-        /* if (mUserAnswer.equals(m_CurrentContinent)) { */
-        if (1 == 1) {
+        if (mUserAnswer.equals(m_CurrentContinent)) { 
             Log.d("Answer", "You got the answer");
 
             //  if the user gets the answer
