@@ -89,6 +89,9 @@ public class FlagActivity extends AppCompatActivity {
         //  set game level to one
         gameLevel = LEVEL_ONE;
 
+        //  reset the player won
+        playerWon = false;
+
         //  create the shake animation
         shake = AnimationUtils.loadAnimation(FlagActivity.this, R.anim.shake);
         //  create the fade animation
@@ -252,55 +255,26 @@ public class FlagActivity extends AppCompatActivity {
                 mLevelCount = 1;
                 mCorrectAnswerCount = 0;
                 maxSuccess = 0;
-                ++gameLevel;
 
-            }
-
-        /*
-            //  logic to move to level two
-            if ((gameLevel == LEVEL_ONE) && (mCorrectAnswerCount == maxSuccess)) {
-                mRoundCount = 2;
-
-                //  reset the level and correct answer count
-                //  reset the level and correct answer count
-                mLevelCount = 1;
-                mCorrectAnswerCount = 0;
-                maxSuccess = 3;
-
-                //  --> test with game level
-                gameLevel = LEVEL_TWO;
-            }
-
-            //  logic to move to level three
-            if ((gameLevel == LEVEL_TWO) && (mCorrectAnswerCount == maxSuccess)) {
-                mRoundCount = 3;
-
-                //  reset the level and correct answer count
-                //  reset the level and correct answer count
-                mLevelCount = 1;
-                mCorrectAnswerCount = 0;
-                maxSuccess = 2;
-
-                gameLevel = LEVEL_THREE;
+                //  if its the end of the game
+                //  dont increment level
+                if (gameLevel <= LEVEL_FOUR) {
+                    ++gameLevel;
+                }
             }
 
 
-            //  logic to move to level four
-            if  ((gameLevel == LEVEL_THREE) && (mCorrectAnswerCount == maxSuccess)) {
-                mRoundCount = 4;
+            //  display you won if user wins
+            if (gameLevel == LEVEL_FOUR && (mCorrectAnswerCount == maxSuccess)) {
 
-                //  reset the level and correct answer count
-                //  reset the level and correct answer count
-                mLevelCount = 1;
-                mCorrectAnswerCount = 0;
-                maxSuccess = 1;
+                //  display you won and end game
+                playerWon = true;
 
-                gameLevel = LEVEL_FOUR;
+                endGame();
+
             }
 
-
-
-        */    //  set the game variables
+          //  set the game variables
             mLevel_textView.setText("Level " + String.valueOf(mLevelCount));
             mRound_textView.setText("Round " + String.valueOf(mRoundCount));
 
@@ -385,6 +359,7 @@ public class FlagActivity extends AppCompatActivity {
             }
         });
         builder.show();
+
     }
 
     /**
